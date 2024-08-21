@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "devstart": "nodemon index.js"
+    "devst": "nodemon index.js"
   },
   "keywords": [
     "scalable",

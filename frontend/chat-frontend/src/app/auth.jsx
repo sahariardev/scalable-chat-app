@@ -19,6 +19,8 @@ const Auth = () => {
             const res = await axios.post(signupUrl, {
                 username: username,
                 password: password
+            }, {
+                withCredentials: true
             });
 
             if (res.data?.message === 'Username already exists') {
