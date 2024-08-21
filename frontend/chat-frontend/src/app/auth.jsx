@@ -26,7 +26,29 @@ const Auth = () => {
             if (res.data?.message === 'Username already exists') {
                 alert('Username already exists')
             } else {
-                router.push('/chat');
+                router.replace('/chat');
+            }
+
+        } catch (e) {
+            console.log('Something went wrong', e);
+        }
+    }
+
+    const login = async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await axios.post(signupUrl, {
+                username: username,
+                password: password
+            }, {
+                withCredentials: true
+            });
+
+            if (res.data?.message === 'Auth failed!') {
+                alert('auth pailed')
+            } else {
+                router.replace('/chat');
             }
 
         } catch (e) {
@@ -68,8 +90,8 @@ const Auth = () => {
 
                                 <div className="flex flow-row justify-between">
                                     <button type="button"
-                                            onClick={() => {
-
+                                            onClick={(e) => {
+                                                login(e);
                                             }}
                                             className="w-1/3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Login
                                     </button>

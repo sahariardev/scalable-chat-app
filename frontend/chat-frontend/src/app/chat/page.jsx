@@ -1,5 +1,5 @@
 import React from "react";
-import Chat from "@/app/chat";
+import Chat from "@/app/chat/chat";
 const ChatView = () => {
     return (
         <Chat/>

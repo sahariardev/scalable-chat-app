@@ -10,7 +10,9 @@ const Chat = () => {
     const [msgs, setMsgs] = useState([]);
 
     useEffect(() => {
-        const newSocket = io('http://localhost:8080');
+        const newSocket = io('http://localhost:8080', {
+            query: 'rifat'
+        });
         setSocket(newSocket);
 
         newSocket.on('message', msg => {
@@ -27,8 +29,14 @@ const Chat = () => {
     const sendMessage = (e) => {
         e.preventDefault();
 
+        const messageToBeSent = {
+            textMsg: msg,
+            sender: 'amit',
+            receiver: 'rifat'
+        };
+
         if (socket) {
-            socket.emit('message', msg);
+            socket.emit('message', messageToBeSent);
             setMsgs(prevMsgs => [...prevMsgs, {text: msg, sentByCurrentUser: true}]);
             setMsg('');
         }
