@@ -1,6 +1,6 @@
 # Ignore all node_modules directories
 **/node_modules/
-
+**/.env
 # Other common ignores
 .DS_Store
 *.log
