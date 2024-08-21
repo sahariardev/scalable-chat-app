@@ -3,6 +3,7 @@
 import React, {useState} from "react";
 import axios from "axios";
 import {useRouter} from "next/navigation";
+import {useAuthStore} from './zustand/useAuthStore'
 
 const Auth = () => {
 
@@ -11,6 +12,7 @@ const Auth = () => {
     const signupUrl = rootUrl + '/' + 'auth/signup'
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const {updateAuthName} = useAuthStore();
 
     const signUp = async (e) => {
         e.preventDefault();
@@ -26,6 +28,7 @@ const Auth = () => {
             if (res.data?.message === 'Username already exists') {
                 alert('Username already exists')
             } else {
+                updateAuthName(username);
                 router.replace('/chat');
             }
 
@@ -48,6 +51,7 @@ const Auth = () => {
             if (res.data?.message === 'Auth failed!') {
                 alert('auth pailed')
             } else {
+                updateAuthName(username);
                 router.replace('/chat');
             }
 

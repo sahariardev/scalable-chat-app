@@ -7,6 +7,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+const userSocketMap = {};
 
 const server = http.createServer(app);
 
@@ -22,13 +23,16 @@ const io = new Server(server, {
 })
 
 io.on('connection', (socket) => {
-    console.log('client connected')
-
     const username = socket.handshake.query.username;
-    console.log(username);
+    userSocketMap[username] = socket;
 
     socket.on('message', (data) => {
-        console.log(`message is ${data}`);
+        const receiverSocket = userSocketMap[data.receiver];
+
+        if (receiverSocket) {
+            receiverSocket.emit('message', data.message);
+        }
+
         socket.broadcast.emit('message', data);
     })
 })
