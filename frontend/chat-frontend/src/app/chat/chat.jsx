@@ -6,6 +6,7 @@ import {useAuthStore} from "@/app/zustand/useAuthStore";
 import axios from "axios";
 import {useUserStore} from "@/app/zustand/useUserStore";
 import Users from "@/app/_components/users";
+import {useChatReceiverStore} from "@/app/zustand/useChatReceiverStore";
 
 const Chat = () => {
 
@@ -16,11 +17,17 @@ const Chat = () => {
     const rootUrl = 'http://localhost:5000'
     const usersUrl = rootUrl + '/' + 'users'
     const {updateUsers} = useUserStore();
+    const {receiver} = useChatReceiverStore();
+
+    console.log("auth name is:", authName);
 
     useEffect(() => {
         const newSocket = io('http://localhost:8080', {
-            query: authName
+            query: {
+                username: authName
+            }
         });
+
         setSocket(newSocket);
 
         newSocket.on('message', msg => {
@@ -42,14 +49,18 @@ const Chat = () => {
 
     const sendMessage = (e) => {
         e.preventDefault();
+        if(!receiver) {
+            return;
+        }
 
         const messageToBeSent = {
             textMsg: msg,
             sender: authName,
-            receiver: 'rifat'
+            receiver: receiver.username
         };
 
         if (socket) {
+            console.log("Message sending", messageToBeSent);
             socket.emit('message', messageToBeSent);
             setMsgs(prevMsgs => [...prevMsgs, {text: msg, sentByCurrentUser: true}]);
             setMsg('');
@@ -65,7 +76,10 @@ const Chat = () => {
                 <Users/>
             </div>
             <div className="w-4/5 flex flex-col">
-                <div className="msgs-container h-4/5 overflow-scroll">
+                <div className="info-container h-.5/6 text-center bg-blue-800 text-white">
+                    {authName} Chatting with {receiver?.username}
+                </div>
+                <div className="msgs-container h-5/6 overflow-scroll">
                     {
                         msgs.map((msg, index) => (
                                 <div key={index} className={`m-5 mb-8 ${msg.sentByCurrentUser ? 'text-right' : 'text-left'}`}>

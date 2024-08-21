@@ -24,16 +24,17 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
     const username = socket.handshake.query.username;
-    userSocketMap[username] = socket;
+    userSocketMap[username] = socket
 
     socket.on('message', (data) => {
         const receiverSocket = userSocketMap[data.receiver];
+        console.log(data);
 
         if (receiverSocket) {
-            receiverSocket.emit('message', data.message);
+            console.log("Receiver socket is ", receiverSocket);
+            console.log("All sockets are", socket);
+            receiverSocket.emit('message', data);
         }
-
-        socket.broadcast.emit('message', data);
     })
 })
 
