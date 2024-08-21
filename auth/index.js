@@ -2,13 +2,16 @@ import express from 'express'
 import dotenv from 'dotenv';
 import authRouter  from "./routes/auth.route.js";
 import connectToMongoDB from "./db/connection.mongodb.js";
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 6000;
 app.use(express.json());
-app.use(authRouter)
+app.use(cors());
+app.use('/auth',authRouter);
+
 
 app.listen(port, async () => {
    await connectToMongoDB()

@@ -42,7 +42,9 @@ const Chat = () => {
             <div className="msgs-container h-4/5 overflow-scroll">
                 {
                     msgs.map((msg, index) => (
-                            <div key={index} className={`msg m-5 ${msg.sentByCurrentUser ? 'text-right' : 'text-left'}`}> {msg.text}</div>
+                            <div key={index} className={`m-5 mb-8 ${msg.sentByCurrentUser ? 'text-right' : 'text-left'}`}>
+                             <span className={`p-3 rounded-lg ${msg.sentByCurrentUser ? 'bg-blue-200' : 'bg-green-200'}`}>{msg.text}</span>
+                            </div>
                         )
                     )
                 }

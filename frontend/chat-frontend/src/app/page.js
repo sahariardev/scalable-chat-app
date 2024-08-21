@@ -1,10 +1,9 @@
-import Image from "next/image";
-import Chat from "@/app/chat";
+import Auth from "@/app/auth";
 
 export default function Home() {
   return (
       <div>
-        <Chat></Chat>
+        <Auth></Auth>
       </div>
   );
 }
