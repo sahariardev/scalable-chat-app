@@ -1,0 +1,18 @@
+{
+  "name": "chat-app-backend",
+  "version": "1.0.0",
+  "description": "A scalable chat app backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "scalable",
+    "chatapp"
+  ],
+  "author": "Sahariar Alam Khandoker",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

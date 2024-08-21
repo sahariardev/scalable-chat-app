@@ -1,0 +1,29 @@
+# Ignore all node_modules directories
+**/node_modules/
+
+# Other common ignores
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore .env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore build output
+/dist
+/build
+
+# Ignore editor directories and files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore MacOS folder attributes
+.DS_Store
