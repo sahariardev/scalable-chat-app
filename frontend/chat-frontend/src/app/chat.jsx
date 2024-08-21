@@ -14,7 +14,11 @@ const Chat = () => {
         setSocket(newSocket);
 
         newSocket.on('message', msg => {
-            setMsgs([...msgs, msg]);
+
+            console.log("messages are now before receiving", msgs);
+            setMsgs(prevMsgs => [...prevMsgs, {text: msg, sentByCurrentUser: false}]);
+
+            console.log("messages are now after receiving", msgs);
         });
 
         return () => newSocket.close();
@@ -25,17 +29,20 @@ const Chat = () => {
 
         if (socket) {
             socket.emit('message', msg);
-            setMsgs([...msgs, msg]);
+            setMsgs(prevMsgs => [...prevMsgs, {text: msg, sentByCurrentUser: true}]);
             setMsg('');
         }
+
+
+        console.log("messages are now after sending", msgs);
     }
 
     return (
-        <div>
-            <div className="msgs-container">
+        <div className="h-screen flex flex-col">
+            <div className="msgs-container h-4/5 overflow-scroll">
                 {
                     msgs.map((msg, index) => (
-                            <div key={index} className='msg text-right m-5'> {msg}</div>
+                            <div key={index} className={`msg m-5 ${msg.sentByCurrentUser ? 'text-right' : 'text-left'}`}> {msg.text}</div>
                         )
                     )
                 }
