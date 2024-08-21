@@ -7,10 +7,12 @@ import axios from "axios";
 import {useUserStore} from "@/app/zustand/useUserStore";
 import Users from "@/app/_components/users";
 import {useChatReceiverStore} from "@/app/zustand/useChatReceiverStore";
+import {useChatMessagesStore} from "@/app/zustand/useChatMessagesStore";
 
 const Chat = () => {
 
     const [msg, setMsg] = useState('');
+    const {chatMsgs, updateChatMsgs} = useChatMessagesStore();
     const [socket, setSocket] = useState(null);
     const [msgs, setMsgs] = useState([]);
     const {authName} = useAuthStore();
@@ -31,8 +33,7 @@ const Chat = () => {
         setSocket(newSocket);
 
         newSocket.on('message', msg => {
-            console.log(msg);
-            setMsgs(prevMsgs => [...prevMsgs, {text: msg.textMsg, sentByCurrentUser: false}]);
+            updateChatMsgs([...chatMsgs, msg])
         });
 
         getUsers();
@@ -54,7 +55,7 @@ const Chat = () => {
         }
 
         const messageToBeSent = {
-            textMsg: msg,
+            text: msg,
             sender: authName,
             receiver: receiver.username
         };
@@ -62,8 +63,9 @@ const Chat = () => {
         if (socket) {
             console.log("Message sending", messageToBeSent);
             socket.emit('message', messageToBeSent);
-            setMsgs(prevMsgs => [...prevMsgs, {text: msg, sentByCurrentUser: true}]);
             setMsg('');
+            updateChatMsgs([...chatMsgs, messageToBeSent])
+
         }
 
 
@@ -82,8 +84,8 @@ const Chat = () => {
                 <div className="msgs-container h-5/6 overflow-scroll">
                     {
                         msgs.map((msg, index) => (
-                                <div key={index} className={`m-5 mb-8 ${msg.sentByCurrentUser ? 'text-right' : 'text-left'}`}>
-                                    <span className={`p-3 rounded-lg ${msg.sentByCurrentUser ? 'bg-blue-200' : 'bg-green-200'}`}>{msg.text}</span>
+                                <div key={index} className={`m-5 mb-8 ${msg.sender === authName ? 'text-right' : 'text-left'}`}>
+                                    <span className={`p-3 rounded-lg ${msg.sender === authName ? 'bg-blue-200' : 'bg-green-200'}`}>{msg.text}</span>
                                 </div>
                             )
                         )
