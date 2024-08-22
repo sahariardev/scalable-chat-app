@@ -5,6 +5,7 @@ import {Server} from "socket.io";
 import connectToMongoDB from "./db/connection.mongodb.js";
 import {addMsgToConversation} from "./controller/msg.controller.js";
 import messageRoute from './route/msg.route.js'
+import {subscribe, publish, getChannelNameFromUserName} from "./redis/pubsub.service.js";
 
 dotenv.config();
 
@@ -29,13 +30,21 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
     const username = socket.handshake.query.username;
-    userSocketMap[username] = socket
+    userSocketMap[username] = socket;
+    const channelName = `chat_${username}`
+
+    subscribe(getChannelNameFromUserName(username), (message) => {
+        //use socket to send this message
+        socket.emit('message', JSON.parse(message));
+    });
 
     socket.on('message', (data) => {
         const receiverSocket = userSocketMap[data.receiver];
 
         if (receiverSocket) {
             receiverSocket.emit('message', data);
+        } else {
+            publish(getChannelNameFromUserName(data.receiver, JSON.stringify(data)));
         }
 
         addMsgToConversation([msg.sender, msg.receiver], msg)
