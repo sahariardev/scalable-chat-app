@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
+import cors from 'cors';
 import {Server} from "socket.io";
 import connectToMongoDB from "./db/connection.mongodb.js";
 import {addMsgToConversation} from "./controller/msg.controller.js";
@@ -14,6 +15,11 @@ const port = process.env.PORT || 5000;
 const userSocketMap = {};
 
 const server = http.createServer(app);
+
+app.use(cors({
+    credentials: true,
+    origin: '*'
+}));
 
 app.get('/', (req, res) => {
 
@@ -31,7 +37,6 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
     const username = socket.handshake.query.username;
     userSocketMap[username] = socket;
-    const channelName = `chat_${username}`
 
     subscribe(getChannelNameFromUserName(username), (message) => {
         //use socket to send this message
@@ -47,7 +52,7 @@ io.on('connection', (socket) => {
             publish(getChannelNameFromUserName(data.receiver, JSON.stringify(data)));
         }
 
-        addMsgToConversation([msg.sender, msg.receiver], msg)
+        addMsgToConversation([data.sender, data.receiver], data)
     })
 })
 

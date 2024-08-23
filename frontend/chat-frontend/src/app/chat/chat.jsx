@@ -14,14 +14,11 @@ const Chat = () => {
     const [msg, setMsg] = useState('');
     const {chatMsgs, updateChatMsgs} = useChatMessagesStore();
     const [socket, setSocket] = useState(null);
-    const [msgs, setMsgs] = useState([]);
     const {authName} = useAuthStore();
     const rootUrl = 'http://localhost:5000'
     const usersUrl = rootUrl + '/' + 'users'
-    const {updateUsers} = useUserStore();
+    const {users, updateUsers} = useUserStore();
     const {receiver} = useChatReceiverStore();
-
-    console.log("auth name is:", authName);
 
     useEffect(() => {
         const newSocket = io('http://localhost:8080', {
@@ -32,8 +29,9 @@ const Chat = () => {
 
         setSocket(newSocket);
 
-        newSocket.on('message', msg => {
-            updateChatMsgs([...chatMsgs, msg])
+        newSocket.on('message', (msg) => {
+            console.log("users are :: ", users);
+            updateChatMsgs(msg);
         });
 
         getUsers();
@@ -64,12 +62,8 @@ const Chat = () => {
             console.log("Message sending", messageToBeSent);
             socket.emit('message', messageToBeSent);
             setMsg('');
-            updateChatMsgs([...chatMsgs, messageToBeSent])
-
+            updateChatMsgs(messageToBeSent);
         }
-
-
-        console.log("messages are now after sending", msgs);
     }
 
     return (
@@ -83,7 +77,7 @@ const Chat = () => {
                 </div>
                 <div className="msgs-container h-5/6 overflow-scroll">
                     {
-                        msgs.map((msg, index) => (
+                        chatMsgs.map((msg, index) => (
                                 <div key={index} className={`m-5 mb-8 ${msg.sender === authName ? 'text-right' : 'text-left'}`}>
                                     <span className={`p-3 rounded-lg ${msg.sender === authName ? 'bg-blue-200' : 'bg-green-200'}`}>{msg.text}</span>
                                 </div>

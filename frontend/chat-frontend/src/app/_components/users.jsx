@@ -9,25 +9,25 @@ const Users = () => {
     const {users} = useUserStore();
     const {authName} = useAuthStore();
     const {receiver, setReceiver} = useChatReceiverStore();
-    const {updateChatMsgs} = useChatMessagesStore();
-    const rootUrl = 'http://localhost:5000'
+    const {updateChatMsgsList} = useChatMessagesStore();
+    const rootUrl = 'http://localhost:8080'
     const messagesUrl = rootUrl + '/' + 'messages'
 
     useEffect(() => {
         const getMessages = async () => {
-            const res = await axios.get(rootUrl + messagesUrl, {
+            const res = await axios.get(messagesUrl, {
                 params: {
                     'sender': authName,
-                    'receiver': receiver
+                    'receiver': receiver.username
                 }
             }, {
                 withCredentials: true,
             });
 
-            if (res.data.length != 0) {
-                updateChatMsgs(res.data);
+            if (res.data.length !== 0) {
+                updateChatMsgsList(res.data);
             } else {
-                updateChatMsgs([]);
+                updateChatMsgsList([]);
             }
         }
 

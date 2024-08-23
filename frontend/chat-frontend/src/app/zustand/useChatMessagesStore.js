@@ -1,6 +1,9 @@
-import create from "zustand";
+    import {create} from "zustand";
 
-export const useChatMessagesStore = create((set) => ({
-    chatMsgs: [],
-    updateChatMsgs: (chatMsgs) => set({chatMsgs: chatMsgs})
-}));
+    export const useChatMessagesStore = create((set) => ({
+        chatMsgs: [],
+        updateChatMsgsList: (messages) => set({chatMsgs:messages}),
+        updateChatMsgs: (newMsg) => set((state) => ({
+            chatMsgs: [...state.chatMsgs, newMsg]
+        })),
+    }));

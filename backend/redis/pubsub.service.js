@@ -1,23 +1,10 @@
 import Redis from "ioredis";
+import dotenv from 'dotenv';
 
-const subscriber = new Redis({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PWD,
-    username: process.env.REDIS_USER,
-    tls: {}
-});
+dotenv.config();
 
-
-// Create a Redis instance for publishing
-const publisher = new Redis({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PWD,
-    username: process.env.REDIS_USER,
-    tls: {}
-});
-
+const subscriber = new Redis(process.env.REDIS_URI);
+const publisher = new Redis(process.env.REDIS_URI);
 
 
 export function subscribe(channel, callback) {
