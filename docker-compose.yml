@@ -1,19 +1,24 @@
 version: '3.8'
 
-
 services:
   backend:
-    image: sahariardev/chat-backend:latest
+    image: sahariardev/chat-backend:prod
+    build:
+      context: ./backend
     ports:
       - "8080:8080"
 
   auth:
-    image: sahariardev/auth:latest
+    image: sahariardev/auth:prod
+    build:
+      context: ./auth
     ports:
       - "5000:5000"
 
   frontend:
-    image: sahariardev/chat-backend:latest
+    image: sahariardev/chat-frontend:prod
+    build:
+      context: ./frontend/chat-frontend
     ports:
       - "3000:3000"
     depends_on:

@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:lts-alpine3.19
+FROM node
 
 WORKDIR /app
 
