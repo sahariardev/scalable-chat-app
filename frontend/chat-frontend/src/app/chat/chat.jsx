@@ -8,6 +8,7 @@ import {useUserStore} from "@/app/zustand/useUserStore";
 import Users from "@/app/_components/users";
 import {useChatReceiverStore} from "@/app/zustand/useChatReceiverStore";
 import {useChatMessagesStore} from "@/app/zustand/useChatMessagesStore";
+import useUser from "@/app/hooks/useUser";
 
 const Chat = () => {
 
@@ -19,6 +20,9 @@ const Chat = () => {
     const usersUrl = rootUrl + '/' + 'users'
     const {users, updateUsers} = useUserStore();
     const {receiver} = useChatReceiverStore();
+    const user = useUser();
+
+    console.log("user is::", user);
 
     useEffect(() => {
         const newSocket = io('http://localhost:8080', {
